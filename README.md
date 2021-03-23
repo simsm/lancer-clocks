@@ -1,5 +1,5 @@
 # Preface
-This is a fork of the original [Blades in the Dark Clocks Module](https://github.com/troygoode/fvtt-clocks) to handle Lancer-focused clocks. For compatability reasons, the ability to select a theme other than "Lancer Green" has been removed.
+This is a fork of the original [Blades in the Dark Clocks Module](https://github.com/troygoode/fvtt-clocks) to handle Lancer-focused clocks. For now, only "lancer_wallflower_green" and "lancer_gms_red" are available as themes.
 
 # Foundry VTT: Clocks
 

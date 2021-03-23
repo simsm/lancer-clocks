@@ -7,14 +7,10 @@ Create [Blades in the Dark](https://bladesinthedark.com/)-esque [progress clocks
 
 ## Installation
 
-Install directly from within [Foundry VTT's package browser](https://foundryvtt.com/packages/clocks/):
-
-https://foundryvtt.com/packages/clocks/
-
-Or, install manually with [this Manifest URL](https://raw.githubusercontent.com/troygoode/fvtt-clocks/main/module.json):
+Install manually with [this Manifest URL](https://raw.githubusercontent.com/Argonius-Angelus/fvtt-clocks/main/module.json):
 
 ```
-https://raw.githubusercontent.com/troygoode/fvtt-clocks/main/module.json
+https://raw.githubusercontent.com/Argonius-Angelus/fvtt-clocks/main/module.json
 ```
 
 ## Demos
@@ -37,7 +33,7 @@ Clock Tiles are useful for quick, disposable clocks you'd like to drop onto the 
 
 ## Attributions
 
-Clock artwork by [Tim Denee (@dog_blink)](https://twitter.com/dog_blink/status/987137570512420869).
+Clock artwork in previews by [Tim Denee (@dog_blink)](https://twitter.com/dog_blink/status/987137570512420869).
 
 ## License
 

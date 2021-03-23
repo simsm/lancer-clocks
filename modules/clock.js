@@ -37,8 +37,8 @@ export class Clock {
   get image () {
     return { 
       img: `/modules/lancer-clocks/themes/${this.theme}/${this.size}clock_${this.progress}.png`,
-      width: 350,
-      height: 350
+      width: 886,
+      height: 886
     };
   }
 

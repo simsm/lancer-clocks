@@ -6,7 +6,7 @@
   "url": "https://github.com/Argonius-Angelus/fvtt-clocks",
   "manifest": "https://raw.githubusercontent.com/Argonius-Angelus/fvtt-clocks/main/module.json",
   "download": "N/A",
-  "version": "1.3.5",
+  "version": "1.0.0",
   "minimumCoreVersion": "0.7.0",
   "compatibleCoreVersion": "0.7.9",
   "esmodules": ["modules/hooks.js"],

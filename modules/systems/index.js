@@ -8,9 +8,9 @@ const SUPPORTED_SYSTEMS = {
 
 const defaultLoadClockFromActor = ({ actor }) => {
   return {
-    progress: actor.getFlag("clocks", "progress"),
-    size: actor.getFlag("clocks", "size"),
-    theme: actor.getFlag("clocks", "theme")
+    progress: actor.getFlag("lancer-clocks", "progress"),
+    size: actor.getFlag("lancer-clocks", "size"),
+    theme: actor.getFlag("lancer-clocks", "theme")
   };
 };
 

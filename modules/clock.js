@@ -5,11 +5,11 @@ const nextIndexInArray = (arr, el) => {
 
 export class Clock {
   static get sizes () {
-    return [4, 6, 8, 12];
+    return [2, 3, 4, 5, 6, 8, 10, 12];
   }
 
   static get themes () {
-    return ["dog_blink_blue", "dog_blink_yellow"];
+    return ["lancer_solid_green"];
   }
 
   constructor ({ theme, size, progress } = {}) {

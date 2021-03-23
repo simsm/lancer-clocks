@@ -9,7 +9,7 @@ export class Clock {
   }
 
   static get themes () {
-    return ["lancer_solid_green"];
+    return ["lancer_wallflower_green", "lancer_gms_red"];
   }
 
   constructor ({ theme, size, progress } = {}) {

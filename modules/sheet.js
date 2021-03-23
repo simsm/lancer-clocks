@@ -21,7 +21,7 @@ export class ClockSheet extends ActorSheet {
 	  return mergeObject(
       super.defaultOptions,
       {
-        classes: ["clocks", "sheet", `clocks-system-${game.data.system.id}`, "actor", "npc"],
+        classes: ["lancer-clocks", "sheet", `lancer-clocks-system-${game.data.system.id}`, "actor", "npc"],
         template: "/modules/lancer-clocks/templates/sheet.html",
         width: 350,
         height: 525,

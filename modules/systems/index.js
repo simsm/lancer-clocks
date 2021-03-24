@@ -17,7 +17,7 @@ const defaultLoadClockFromActor = ({ actor }) => {
 const defaultPersistClockToActor = async ({ clock }) => {
   return {
     flags: {
-      clocks: {
+      "lancer-clocks": {
         progress: clock.progress,
         size: clock.size,
         theme: clock.theme

@@ -23,8 +23,8 @@ export class ClockSheet extends ActorSheet {
       {
         classes: ["lancer-clocks", "sheet", `lancer-clocks-system-${game.data.system.id}`, "actor", "npc"],
         template: "/modules/lancer-clocks/templates/sheet.html",
-        width: 350,
-        height: 525,
+        width: 375,
+        height: 600,
         ...supportedSystem.sheetDefaultOptions
       }
     );
@@ -45,8 +45,11 @@ export class ClockSheet extends ActorSheet {
     return this._system;
   }
 
-  getData () {
+  async getData () {
     const clock = new Clock(this.system.loadClockFromActor({ actor: this.actor }));
+	await clock.themesPromise
+	console.log(clock)	
+	console.log(clock._themes)
     return mergeObject(super.getData(), {
       clock: {
         progress: clock.progress,
@@ -59,7 +62,7 @@ export class ClockSheet extends ActorSheet {
         },
         settings: {
           sizes: Clock.sizes,
-          themes: Clock.themes
+          themes: clock._themes
         }
       }
     });
@@ -89,6 +92,16 @@ export class ClockSheet extends ActorSheet {
         size: oldClock.size
       }));
     });
+	
+	/* html.find("select[name=theme]").click(async (ev) => {
+		ev.preventDefault();
+		let str = "";
+		for(let theme of await clock._themes) {
+		str += `<option value="${theme}">${theme}</option>`
+		}
+		ev.target.innerHTML = str;
+		console.log("Theme Clicked!");
+	}); */
   }
 
   async _updateObject(_event, form) {

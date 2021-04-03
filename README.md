@@ -19,6 +19,7 @@ With update L1.0.7, there is now support for user created themes. To add a theme
 1) Any spaces or special punctuation in a theme folder needs to be changed to an underscore (\_). While it is possible that a theme with spaces or punctuation could work, replacing them with underscores is the most reliable method.
 2) Clocks inside the folder must be labeled as "\[size]clock\_\[progress].png". For example, "12clock_3.png".
 3) Should a given clock theme not have sizes 2, 3, 4, 5, 6, 8, 10, or 12, then you must be willing to either use placeholder assets, create more to cover the missing size values (and appropriate progress for each), or be willing to handle the fact that said clock will be a broken image file.
+4) It is recommended you also store your clocks elsewhere, as updating the module in foundry deletes any extra themes that aren't part of the github repository.
 
 ## License
 

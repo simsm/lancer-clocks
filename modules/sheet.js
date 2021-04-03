@@ -48,8 +48,8 @@ export class ClockSheet extends ActorSheet {
   async getData () {
     const clock = new Clock(this.system.loadClockFromActor({ actor: this.actor }));
 	await clock.themesPromise
-	console.log(clock)	
-	console.log(clock._themes)
+	//console.log(clock)	
+	//console.log(clock._themes)
     return mergeObject(super.getData(), {
       clock: {
         progress: clock.progress,

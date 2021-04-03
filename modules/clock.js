@@ -9,17 +9,28 @@ export class Clock {
   }
 
   static get themes () {
-    return ["lancer_wallflower_green", "lancer_gms_red", "lancer_wallflower_green_grey", "lancer_gms_red_grey"];
+    return this._themes
   }
 
   constructor ({ theme, size, progress } = {}) {
+		this.themesPromise = FilePicker.browse("data", "modules/lancer-clocks/themes").then(data => {
+		  let tempDirs = data.dirs;
+		  let newDirs = [];
+		  tempDirs.forEach((dirItem) => {
+		    let newDirItem = dirItem.replace("modules/lancer-clocks/themes/","");
+		    newDirs.push(newDirItem)
+		  });
+		  this._themes = newDirs;
+		});
     const isSupportedSize = size && Clock.sizes.indexOf(parseInt(size)) >= 0;
     this._size = isSupportedSize ? parseInt(size) : Clock.sizes[0];
 
     const p = (!progress || progress < 0) ? 0 : progress < this._size ? progress : this._size;
     this._progress = p || 0;
 
-    this._theme = theme || Clock.themes[0];
+    this._theme = theme || this._themes?.[0] || "lancer_wallflower_green";
+	//let testingThemes = FilePicker.browse("data", "modules/lancer-clocks/themes").then(data => {console.log(data)});
+	//console.log(testingThemes);
   }
 
   get theme () {
@@ -62,7 +73,7 @@ export class Clock {
 
   cycleTheme () {
     return new Clock({
-      theme: Clock.themes[nextIndexInArray(Clock.themes, this.theme)],
+      theme: Clock._themes[nextIndexInArray(Clock._themes, this.theme)],
       size: this.size,
       progress: this.progress
     });

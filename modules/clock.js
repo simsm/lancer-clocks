@@ -18,9 +18,28 @@ export class Clock {
 		  let newDirs = [];
 		  tempDirs.forEach((dirItem) => {
 		    let newDirItem = dirItem.replace("modules/lancer-clocks/themes/","");
-		    newDirs.push(newDirItem)
+		    newDirs.push(newDirItem);
 		  });
 		  this._themes = newDirs;
+		  this._themePaths = tempDirs;
+		});
+		let extraPath = game.settings.get("lancer-clocks","extraPaths")
+		if (!(extraPath.endsWith("/"))) {
+			extraPath = extraPath+"/"
+		}
+		//console.log(extraPath)
+		this.extraThemesPromise = FilePicker.browse("data",extraPath).then(data => {
+			let tempExtraDirs = data.dirs;
+			let newExtraDirs = [];
+			tempExtraDirs.forEach((extraDirItem) => {
+				let newExtraDirItem = extraDirItem.replace(extraPath,"");
+				newExtraDirs.push(newExtraDirItem);
+			})
+			//console.log(tempDirs);
+			this._extraThemePaths = tempExtraDirs;
+			this._extraThemes = newExtraDirs;
+		}).catch(err => {
+			console.error(err)
 		});
     const isSupportedSize = size && Clock.sizes.indexOf(parseInt(size)) >= 0;
     this._size = isSupportedSize ? parseInt(size) : Clock.sizes[0];
@@ -47,7 +66,7 @@ export class Clock {
 
   get image () {
     return { 
-      img: `/modules/lancer-clocks/themes/${this.theme}/${this.size}clock_${this.progress}.png`,
+      //img: `/modules/lancer-clocks/themes/${this.theme}/${this.size}clock_${this.progress}.png`,
       width: 350,
       height: 350
     };

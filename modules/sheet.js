@@ -47,22 +47,40 @@ export class ClockSheet extends ActorSheet {
 
   async getData () {
     const clock = new Clock(this.system.loadClockFromActor({ actor: this.actor }));
-	await clock.themesPromise
-	//console.log(clock)	
+	await clock.themesPromise;
+	await clock.extraThemesPromise;
+	//console.log(clock);
 	//console.log(clock._themes)
+	
+	let compiledThemes = [];
+	compiledThemes.push(...clock._themes,...clock._extraThemes);
+	//console.log(compiledThemes);
+	
+	let compiledThemePaths = [];
+	compiledThemePaths.push(...clock._themePaths,...clock._extraThemePaths)
+	//console.log(compiledThemePaths)
+	
+	let themeDict = {};
+	compiledThemes.forEach((themeItem) =>{
+		themeDict[themeItem] = compiledThemePaths[compiledThemes.indexOf(themeItem)]
+	});
+	//console.log(themeDict);
+	
+	//console.log(`/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`)
+	
     return mergeObject(super.getData(), {
       clock: {
         progress: clock.progress,
         size: clock.size,
         theme: clock.theme,
         image: {
-          url: clock.image.img,
+          url: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
           width: clock.image.width,
           height: clock.image.height
         },
         settings: {
           sizes: Clock.sizes,
-          themes: clock._themes
+          themes: compiledThemes
         }
       }
     });

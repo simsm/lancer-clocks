@@ -12,6 +12,15 @@ Install manually with [this Manifest URL](https://raw.githubusercontent.com/Argo
 ```
 https://raw.githubusercontent.com/Argonius-Angelus/fvtt-clocks/main/module.json
 ```
+# Known Issues
+1) Tiles currently do not correctly cycle themes. As a result theme switching for tiles will be disabled.
+
+
+## Creating Clock NPC Actors
+1) Create a new NPC Actor.
+2) Open the Actor's sheet.
+3) Click the button labelled "Sheet" with a cog next to it.
+4) Change the NPC Sheet Type to lancer.ClockSheet.
 
 ## Adding More Themes
 

@@ -115,13 +115,30 @@ export class Clock {
     });
   }
 
-  cycleTheme () {
-    return new Clock({
-      theme: Clock._themes[nextIndexInArray(Clock._themes, this.theme)],
+  /* async cycleTheme () {
+	  let cycleClockThemeClock = new Clock();
+	  await cycleClockThemeClock.themesPromise;
+	  await cycleClockThemeClock.extraThemesPromise;
+	  
+		let cycleClockThemeCompiledThemes = [];
+		cycleClockThemeCompiledThemes.push(...cycleClockThemeClock._themes,...(cycleClockThemeClock._extraThemes ?? []));
+		//console.log(cycleClockThemeCompiledThemes);
+	
+		let cycleClockThemeCompiledThemePaths = [];
+		cycleClockThemeCompiledThemePaths.push(...cycleClockThemeClock._themePaths,...(cycleClockThemeClock._extraThemePaths ?? []))
+		//console.log(cycleClockThemeCompiledThemePaths)
+	
+		let cycleClockThemeThemeDict = {};
+		cycleClockThemeCompiledThemes.forEach((themeItem) =>{
+			cycleClockThemeThemeDict[themeItem] = cycleClockThemeCompiledThemePaths[cycleClockThemeCompiledThemes.indexOf(themeItem)]
+		});
+		//console.log(cycleClockThemeCompiledThemes[nextIndexInArray(cycleClockThemeCompiledThemes, this.theme)])
+    return {
+      theme: cycleClockThemeCompiledThemes[nextIndexInArray(cycleClockThemeCompiledThemes, this.theme)],
       size: this.size,
       progress: this.progress
-    });
-  }
+    };
+  } */
 
   increment () {
     const old = this;

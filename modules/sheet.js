@@ -53,11 +53,11 @@ export class ClockSheet extends ActorSheet {
 	//console.log(clock._themes)
 	
 	let compiledThemes = [];
-	compiledThemes.push(...clock._themes,...clock._extraThemes);
+	compiledThemes.push(...clock._themes,...(clock._extraThemes ?? []));
 	//console.log(compiledThemes);
 	
 	let compiledThemePaths = [];
-	compiledThemePaths.push(...clock._themePaths,...clock._extraThemePaths)
+	compiledThemePaths.push(...clock._themePaths,...(clock._extraThemePaths ?? []))
 	//console.log(compiledThemePaths)
 	
 	let themeDict = {};
@@ -138,13 +138,28 @@ export class ClockSheet extends ActorSheet {
 
   async updateClock(clock) {
     const actor = this.actor;
-
+	
+	await clock.themesPromise;
+	await clock.extraThemesPromise;
+	
+	let compiledThemes = [];
+	compiledThemes.push(...clock._themes,...(clock._extraThemes ?? []));
+	//console.log(compiledThemes);
+	
+	let compiledThemePaths = [];
+	compiledThemePaths.push(...clock._themePaths,...(clock._extraThemePaths ?? []))
+	//console.log(compiledThemePaths)
+	
+	let themeDict = {};
+	compiledThemes.forEach((themeItem) =>{
+		themeDict[themeItem] = compiledThemePaths[compiledThemes.indexOf(themeItem)]
+	});
     // update associated tokens
     const tokens = actor.getActiveTokens();
     for (const t of tokens) {
       await t.update({
         name: actor.name,
-        img: clock.image.img,
+        img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
         actorLink: true
       });
     }
@@ -152,9 +167,9 @@ export class ClockSheet extends ActorSheet {
     // update the Actor
     const persistObj = await this.system.persistClockToActor({ actor, clock });
     const visualObj = {
-      img: clock.image.img,
+      img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
       token: {
-        img: clock.image.img,
+        img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
         ...DEFAULT_TOKEN
       }
     };

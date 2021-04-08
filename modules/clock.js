@@ -16,12 +16,27 @@ export class Clock {
 		this.themesPromise = FilePicker.browse("data", "modules/lancer-clocks/themes").then(data => {
 		  let tempDirs = data.dirs;
 		  let newDirs = [];
+		  let newPaths = [];
+		  let baseDirCheck = false;
 		  tempDirs.forEach((dirItem) => {
 		    let newDirItem = dirItem.replace("modules/lancer-clocks/themes/","");
-		    newDirs.push(newDirItem);
+		    if (dirItem.startsWith("modules/lancer-clocks/themes/")) {
+				newDirs.push(newDirItem);
+				newPaths.push(dirItem);
+				//console.log(dirItem)
+				baseDirCheck = true;
+			}
 		  });
-		  this._themes = newDirs;
-		  this._themePaths = tempDirs;
+		  if (!(baseDirCheck)) {
+			  console.error("Failed.")
+			//throw "Lancer Clock Direrctory Error: No valid directories for base themes."; //Enabling this Breaks Things.
+		  };
+		  
+		this._themes = newDirs;
+		this._themePaths = tempDirs;
+		
+		}).catch(err => {
+			console.error(err)
 		});
 		let extraPath = game.settings.get("lancer-clocks","extraPaths")
 		if (!(extraPath.endsWith("/"))) {
@@ -31,12 +46,22 @@ export class Clock {
 		this.extraThemesPromise = FilePicker.browse("data",extraPath).then(data => {
 			let tempExtraDirs = data.dirs;
 			let newExtraDirs = [];
+			let newExtraPaths = [];
+			let extraDirCheck = false;
 			tempExtraDirs.forEach((extraDirItem) => {
 				let newExtraDirItem = extraDirItem.replace(extraPath,"");
-				newExtraDirs.push(newExtraDirItem);
+				if (extraDirItem.startsWith(extraPath)) {
+					newExtraDirs.push(newExtraDirItem);
+					newExtraPaths.push(extraDirItem);
+					extraDirCheck = true;
+				}
 			})
 			//console.log(tempDirs);
-			this._extraThemePaths = tempExtraDirs;
+			if (!(extraDirCheck)) {
+				//console.error("Extra Failed.");
+				//throw "Lancer Clock Directory Error: No valid directories for extra themes."; //Enabling this Breaks Things.
+			};
+			this._extraThemePaths = newExtraPaths;
 			this._extraThemes = newExtraDirs;
 		}).catch(err => {
 			console.error(err)

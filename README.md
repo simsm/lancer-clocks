@@ -27,6 +27,3 @@ With update L1.0.8, there is now support for user created themes. To add a theme
 This module is available as open source under the terms of the MIT License.
 
 [MIT License](http://www.opensource.org/licenses/mit-license.php)
-
-## Stay up to date
-Want a way to get a notification every time the module is updated? Join the server at this link for updates. https://discord.gg/NKRFe2rBdR

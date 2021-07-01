@@ -8,7 +8,7 @@
   "download": "https://github.com/Argonius-Angelus/fvtt-clocks/archive/L1.0.10.zip",
   "version": "1.0.10",
   "minimumCoreVersion": "0.7.0",
-  "compatibleCoreVersion": "0.7.9",
+  "compatibleCoreVersion": "0.8.8",
   "esmodules": ["modules/hooks.js"],
   "styles": ["styles/clocks.css"]
 }

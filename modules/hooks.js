@@ -1,5 +1,5 @@
 import { ClockSheet } from "./sheet.js";
-import Tiles from "./tiles.js";
+//import Tiles from "./tiles.js";
 import { log } from "./util.js";
 
 Hooks.once("init", () => {
@@ -15,10 +15,10 @@ Hooks.once("init", () => {
 	});
 });
 
-Hooks.on("getSceneControlButtons", (controls) => {
+/* Hooks.on("getSceneControlButtons", (controls) => {
   Tiles.getSceneControlButtons(controls);
 });
 
 Hooks.on("renderTileHUD", async (hud, html, tile) => {
   await Tiles.renderTileHUD(hud, html, tile);
-});
+}); */

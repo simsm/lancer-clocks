@@ -154,14 +154,28 @@ export class ClockSheet extends ActorSheet {
 	compiledThemes.forEach((themeItem) =>{
 		themeDict[themeItem] = compiledThemePaths[compiledThemes.indexOf(themeItem)]
 	});
+	//console.log(game.data.version);
+	let fullVer = game.data.version
     // update associated tokens
     const tokens = actor.getActiveTokens();
+	let verMajor = fullVer.slice(0,3)
+	//console.log(verMajor)
     for (const t of tokens) {
-      await t.update({
-        name: actor.name,
-        img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
-        actorLink: true
-      });
+		//version check for compatability
+		if (verMajor == "0.8" || verMajor == "0.9") {
+			await t.document.update({
+				name: actor.name,
+				img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
+				actorLink: true
+			});
+		//minor backwards compatability, will be removed sometime after the Lancer system fully updates to Foundry 0.8.x
+		} else if (verMajor == "0.7"){
+			await t.update({
+				name: actor.name,
+				img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
+				actorLink: true
+			});
+		};
     }
 
     // update the Actor

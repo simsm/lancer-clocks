@@ -13,6 +13,16 @@ Hooks.once("init", () => {
 		type: String,
 		default: 'lancer-clocks',
 	});
+	let extraPath = game.settings.get("lancer-clocks","extraPaths");
+	if (!(extraPath.endsWith("/"))) {
+			extraPath = extraPath+"/"
+	};
+	let pathPromise = FilePicker.browse("data",extraPath).then(Bep => {
+		console.log("Foundry VTT | Lancer Clocks | Found custom user directory.")}
+	).catch(err => {
+		FilePicker.createDirectory("data",extraPath)
+		console.log("Foundry VTT | Lancer Clocks | Created custom user directory.")})
+
 });
 
 /* Hooks.on("getSceneControlButtons", (controls) => {

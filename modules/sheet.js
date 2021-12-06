@@ -154,15 +154,15 @@ export class ClockSheet extends ActorSheet {
 	compiledThemes.forEach((themeItem) =>{
 		themeDict[themeItem] = compiledThemePaths[compiledThemes.indexOf(themeItem)]
 	});
-	//console.log(game.data.version);
-	let fullVer = game.data.version
+	console.log(game.version ?? game.data.version);
+	let fullVer = game.version ?? game.data.version
     // update associated tokens
     const tokens = actor.getActiveTokens();
 	let verMajor = fullVer.slice(0,3)
 	//console.log(verMajor)
     for (const t of tokens) {
 		//version check for compatability
-		if (verMajor == "0.8" || verMajor == "0.9") {
+		if (verMajor == "0.8" || verMajor.startsWith("9")) {
 			await t.document.update({
 				name: actor.name,
 				img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,

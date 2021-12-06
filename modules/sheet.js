@@ -154,7 +154,7 @@ export class ClockSheet extends ActorSheet {
 	compiledThemes.forEach((themeItem) =>{
 		themeDict[themeItem] = compiledThemePaths[compiledThemes.indexOf(themeItem)]
 	});
-	console.log(game.version ?? game.data.version);
+	//console.log(game.version ?? game.data.version);
 	let fullVer = game.version ?? game.data.version
     // update associated tokens
     const tokens = actor.getActiveTokens();

@@ -1,5 +1,8 @@
 # Preface
-This is a fork of the original [Blades in the Dark Clocks Module](https://github.com/troygoode/fvtt-clocks) to handle Lancer-focused clocks. This allows for any number of themes, so long as the guidelines in "Adding More Themes" are followed.
+This is a fork of the original [Blades in the Dark Clocks Module](https://github.com/troygoode/fvtt-clocks) to handle Lancer-focused progress/resource tracking clocks. This allows for any number of themes, so long as the guidelines in "Adding More Themes" are followed.
+
+While it was initially designed to be used for the Lancer system specifically (hence the name and clock styles that come by default), it is actually compatible with every system that has actor sheets due to some modifications to the original code.
+
 
 # Foundry VTT: Clocks
 
@@ -16,14 +19,14 @@ It is also now available in the official Foundry add-on repository.
 
 # Known Issues
 1) Tiles currently do not correctly cycle themes. As a result theme switching for tiles will be disabled.
-2) Tiles do not work as of version L1.0.11. This is an intentional disabling of the activation of that part of the module due to compatability issues with Foundry 0.8.X. If you wish to attempt to get the Tiles to work in Foundry 0.8.X then you must first uncomment the lines in hooks.js, then work on improving the tiles.js code to be compatible with Foundry 0.8.X. I wholly believe such an endeavour would require a complete rewrite, which is honestly more than I am willing to do currently when the Actor portion of still works with no issues.
+2) Tiles do not work as of version L1.0.11. This is an intentional disabling of the activation of that part of the module due to compatability issues with Foundry 0.8.X+. If you wish to attempt to get the Tiles to work in Foundry 0.8.X then you must first uncomment the lines in hooks.js, then work on improving the tiles.js code to be compatible with Foundry 0.8.X+. I wholly believe such an endeavour would require a complete rewrite, which is honestly more than I am willing to do currently when the Actor portion of still works with no issues.
 
 
 ## Creating Clock NPC Actors
 1) Create a new NPC Actor.
 2) Open the Actor's sheet.
 3) Click the button labelled "Sheet" with a cog next to it.
-4) Change the NPC Sheet Type to lancer.ClockSheet.
+4) Change the NPC Sheet Type to <system type>.ClockSheet.
 
 ## Adding More Themes
 

@@ -138,6 +138,8 @@ export class ClockSheet extends ActorSheet {
 
   async updateClock(clock) {
     const actor = this.actor;
+	console.log(actor)
+	console.log(this.actor)
 	
 	await clock.themesPromise;
 	await clock.extraThemesPromise;
@@ -162,15 +164,14 @@ export class ClockSheet extends ActorSheet {
 	//console.log(verMajor)
     for (const t of tokens) {
 		//version check for compatability
-		if (verMajor == "0.8" || verMajor.startsWith("9")) {
-			await t.document.update({
+		if (verMajor == "0.7"){
+			await t.update({
 				name: actor.name,
 				img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
 				actorLink: true
 			});
-		//minor backwards compatability, will be removed sometime after the Lancer system fully updates to Foundry 0.8.x
-		} else if (verMajor == "0.7"){
-			await t.update({
+		} else {
+			await t.document.update({
 				name: actor.name,
 				img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
 				actorLink: true

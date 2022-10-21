@@ -1,192 +1,171 @@
-import { Clock } from "./clock.js";
-import { getSystemMapping } from "./systems/index.js";
-import { log, warn } from "./util.js";
+const nextIndexInArray = (arr, el) => {
+  const idx = arr.indexOf(el);
+  return (idx < 0 || idx >= arr.length) ? 0 : idx + 1;
+}
 
-const DISPLAY_NAME = {
-  ALWAYS_FOR_EVERYONE: 50
-};
-const DISPOSITION = {
-  NEUTRAL: 0
-};
-const DEFAULT_TOKEN = {
-  scale: 1,
-  disposition: DISPOSITION.NEUTRAL,
-  displayName: DISPLAY_NAME.ALWAYS_FOR_EVERYONE,
-  actorLink: true
-};
-
-export class ClockSheet extends ActorSheet {
-  static get defaultOptions() {
-    const supportedSystem = getSystemMapping(game.data.system.id);
-	  return mergeObject(
-      super.defaultOptions,
-      {
-        classes: ["lancer-clocks", "sheet", `lancer-clocks-system-${game.data.system.id}`, "actor", "npc"],
-        template: "modules/lancer-clocks/templates/sheet.html",
-        width: 375,
-        height: 600,
-        ...supportedSystem.sheetDefaultOptions
-      }
-    );
+export class Clock {
+  static get sizes () {
+    return [2, 3, 4, 5, 6, 8, 10, 12];
   }
 
-  static register () {
-    const supportedSystem = getSystemMapping(game.data.system.id);
-    Actors.registerSheet(supportedSystem.id, ClockSheet, supportedSystem.registerSheetOptions);
-    log("Sheet Registered");
+  static get themes () {
+    return this._themes
   }
 
-  constructor (...args) {
-    super(...args);
-    this._system = getSystemMapping(game.data.system.id);
-  }
-
-  get system () {
-    return this._system;
-  }
-
-  async getData () {
-    const clock = new Clock(this.system.loadClockFromActor({ actor: this.actor }));
-	await clock.themesPromise;
-	await clock.extraThemesPromise;
-	//console.log(clock);
-	//console.log(clock._themes)
-	
-	let compiledThemes = [];
-	compiledThemes.push(...clock._themes,...(clock._extraThemes ?? []));
-	//console.log(compiledThemes);
-	
-	let compiledThemePaths = [];
-	compiledThemePaths.push(...clock._themePaths,...(clock._extraThemePaths ?? []))
-	//console.log(compiledThemePaths)
-	
-	let themeDict = {};
-	compiledThemes.forEach((themeItem) =>{
-		themeDict[themeItem] = compiledThemePaths[compiledThemes.indexOf(themeItem)]
-	});
-	//console.log(themeDict);
-	
-	//console.log(`/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`)
-	
-    return mergeObject(super.getData(), {
-      clock: {
-        progress: clock.progress,
-        size: clock.size,
-        theme: clock.theme,
-        image: {
-          url: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
-          width: clock.image.width,
-          height: clock.image.height
-        },
-        settings: {
-          sizes: Clock.sizes,
-          themes: compiledThemes
-        }
-      }
-    });
-  }
-
-  activateListeners (html) {
-    super.activateListeners(html);
-
-    html.find("button[name=minus]").click(async (ev) => {
-      ev.preventDefault();
-      const oldClock = new Clock(this.system.loadClockFromActor({ actor: this.actor }));
-      this.updateClock(oldClock.decrement());
-    });
-
-    html.find("button[name=plus]").click(async (ev) => {
-      ev.preventDefault();
-      const oldClock = new Clock(this.system.loadClockFromActor({ actor: this.actor }));
-      this.updateClock(oldClock.increment());
-    });
-
-    html.find("button[name=reset]").click(async (ev) => {
-      ev.preventDefault();
-      const oldClock = new Clock(this.system.loadClockFromActor({ actor: this.actor }));
-      this.updateClock(new Clock({
-        theme: oldClock.theme,
-        progress: 0,
-        size: oldClock.size
-      }));
-    });
-	
-	/* html.find("select[name=theme]").click(async (ev) => {
-		ev.preventDefault();
-		let str = "";
-		for(let theme of await clock._themes) {
-		str += `<option value="${theme}">${theme}</option>`
+  constructor ({ theme, size, progress } = {}) {
+		this.themesPromise = FilePicker.browse("data", "modules/lancer-clocks/themes").then(data => {
+		  let tempDirs = data.dirs;
+		  let newDirs = [];
+		  let newPaths = [];
+		  let baseDirCheck = false;
+		  tempDirs.forEach((dirItem) => {
+		    let newDirItem = dirItem.replace("modules/lancer-clocks/themes/","");
+		    if (dirItem.startsWith("modules/lancer-clocks/themes/")) {
+				newDirs.push(newDirItem);
+				newPaths.push(dirItem);
+				//console.log(dirItem)
+				baseDirCheck = true;
+			}
+		  });
+		  if (!(baseDirCheck)) {
+			  console.error("Failed.")
+			//throw "Lancer Clock Direrctory Error: No valid directories for base themes."; //Enabling this Breaks Things.
+		  };
+		  
+		this._themes = newDirs;
+		this._themePaths = tempDirs;
+		
+		}).catch(err => {
+			console.error(err)
+		});
+		let extraPath = game.settings.get("lancer-clocks","extraPaths")
+		if (!(extraPath.endsWith("/"))) {
+			extraPath = extraPath+"/"
 		}
-		ev.target.innerHTML = str;
-		console.log("Theme Clicked!");
-	}); */
+		//console.log(extraPath)
+		this.extraThemesPromise = FilePicker.browse("data",extraPath).then(data => {
+			let tempExtraDirs = data.dirs;
+			let newExtraDirs = [];
+			let newExtraPaths = [];
+			let extraDirCheck = false;
+			tempExtraDirs.forEach((extraDirItem) => {
+				let newExtraDirItem = extraDirItem.replace(extraPath,"");
+				if (extraDirItem.startsWith(extraPath)) {
+					newExtraDirs.push(newExtraDirItem);
+					newExtraPaths.push(extraDirItem);
+					extraDirCheck = true;
+				}
+			})
+			//console.log(tempDirs);
+			if (!(extraDirCheck)) {
+				//console.error("Extra Failed.");
+				//throw "Lancer Clock Directory Error: No valid directories for extra themes."; //Enabling this Breaks Things.
+			};
+			this._extraThemePaths = newExtraPaths;
+			this._extraThemes = newExtraDirs;
+		}).catch(err => {
+			console.error(err)
+		});
+    const isSupportedSize = size && Clock.sizes.indexOf(parseInt(size)) >= 0;
+    this._size = isSupportedSize ? parseInt(size) : Clock.sizes[0];
+
+    const p = (!progress || progress < 0) ? 0 : progress < this._size ? progress : this._size;
+    this._progress = p || 0;
+
+    this._theme = theme || this._themes?.[0] || "lancer_wallflower_green";
+	//let testingThemes = FilePicker.browse("data", "modules/lancer-clocks/themes").then(data => {console.log(data)});
+	//console.log(testingThemes);
   }
 
-  async _updateObject(_event, form) {
-    await this.object.update({
-      name: form.name
-    });
-
-    const oldClock = new Clock(this.system.loadClockFromActor({ actor: this.actor }));
-    let newClock = new Clock({
-      progress: oldClock.progress,
-      size: form.size,
-      theme: form.theme
-    });
-    await this.updateClock(newClock);
+  get theme () {
+    return this._theme;
   }
 
-  async updateClock(clock) {
-    const actor = this.actor;
-	
-	await clock.themesPromise;
-	await clock.extraThemesPromise;
-	
-	let compiledThemes = [];
-	compiledThemes.push(...clock._themes,...(clock._extraThemes ?? []));
-	//console.log(compiledThemes);
-	
-	let compiledThemePaths = [];
-	compiledThemePaths.push(...clock._themePaths,...(clock._extraThemePaths ?? []))
-	//console.log(compiledThemePaths)
-	
-	let themeDict = {};
-	compiledThemes.forEach((themeItem) =>{
-		themeDict[themeItem] = compiledThemePaths[compiledThemes.indexOf(themeItem)]
-	});
-	//console.log(game.version ?? game.data.version);
-	let fullVer = game.version ?? game.data.version
-    // update associated tokens
-    const tokens = actor.getActiveTokens();
-	let verMajor = fullVer.slice(0,3)
-	//console.log(verMajor)
-    for (const t of tokens) {
-		//version check for compatability
-		if (verMajor == "0.8" || verMajor.startsWith("9")) {
-			await t.document.update({
-				name: actor.name,
-				img: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
-				actorLink: true
-			});
-		//minor backwards compatability, will be removed sometime after the Lancer system fully updates to Foundry 0.8.x
-		} else if (verMajor == "0.7"){
-			await t.update({
-				name: actor.name,
-				img: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
-				actorLink: true
-			});
-		};
-    }
+  get size () {
+    return this._size;
+  }
 
-    // update the Actor
-    const persistObj = await this.system.persistClockToActor({ actor, clock });
-    const visualObj = {
-      img: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
-      token: {
-        img: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
-        ...DEFAULT_TOKEN
+  get progress () {
+    return this._progress;
+  }
+
+  get image () {
+    return { 
+      //img: `/modules/lancer-clocks/themes/${this.theme}/${this.size}clock_${this.progress}.png`,
+      width: 350,
+      height: 350
+    };
+  }
+
+  get flags () {
+    return {
+      clocks: {
+        theme: this._theme,
+        size: this._size,
+        progress: this._progress
       }
     };
-    await actor.update(mergeObject(visualObj, persistObj));
+  }
+
+  cycleSize () {
+    return new Clock({
+      theme: this.theme,
+      size: Clock.sizes[nextIndexInArray(Clock.sizes, this.size)],
+      progress: this.progress
+    });
+  }
+
+  /* async cycleTheme () {
+	  let cycleClockThemeClock = new Clock();
+	  await cycleClockThemeClock.themesPromise;
+	  await cycleClockThemeClock.extraThemesPromise;
+	  
+		let cycleClockThemeCompiledThemes = [];
+		cycleClockThemeCompiledThemes.push(...cycleClockThemeClock._themes,...(cycleClockThemeClock._extraThemes ?? []));
+		//console.log(cycleClockThemeCompiledThemes);
+	
+		let cycleClockThemeCompiledThemePaths = [];
+		cycleClockThemeCompiledThemePaths.push(...cycleClockThemeClock._themePaths,...(cycleClockThemeClock._extraThemePaths ?? []))
+		//console.log(cycleClockThemeCompiledThemePaths)
+	
+		let cycleClockThemeThemeDict = {};
+		cycleClockThemeCompiledThemes.forEach((themeItem) =>{
+			cycleClockThemeThemeDict[themeItem] = cycleClockThemeCompiledThemePaths[cycleClockThemeCompiledThemes.indexOf(themeItem)]
+		});
+		//console.log(cycleClockThemeCompiledThemes[nextIndexInArray(cycleClockThemeCompiledThemes, this.theme)])
+    return {
+      theme: cycleClockThemeCompiledThemes[nextIndexInArray(cycleClockThemeCompiledThemes, this.theme)],
+      size: this.size,
+      progress: this.progress
+    };
+  } */
+
+  increment () {
+    const old = this;
+    return new Clock({
+      theme: old.theme,
+      size: old.size,
+      progress: old.progress + 1
+    });
+  }
+
+  decrement () {
+    const old = this;
+    return new Clock({
+      theme: old.theme,
+      size: old.size,
+      progress: old.progress - 1
+    });
+  }
+
+  isEqual (clock) {
+    return clock
+      && clock._progress === this._progress
+      && clock._size === this._size
+      && clock._theme === this._theme;
+  }
+
+  toString () {
+    return `${this._progress}/${this._size} • ${this._theme}`;
   }
 }

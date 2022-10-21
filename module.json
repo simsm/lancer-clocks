@@ -8,7 +8,7 @@
   "download": "https://github.com/Argonius-Angelus/lancer-clocks/archive/L1.0.19.zip",
   "version": "1.0.19",
   "minimumCoreVersion": "0.7.0",
-  "compatibleCoreVersion": "10",
+  "compatibleCoreVersion": "9",
   "esmodules": ["modules/hooks.js"],
   "styles": ["styles/clocks.css"]
 }

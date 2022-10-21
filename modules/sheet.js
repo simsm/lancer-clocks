@@ -74,7 +74,7 @@ export class ClockSheet extends ActorSheet {
         size: clock.size,
         theme: clock.theme,
         image: {
-          url: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
+          url: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
           width: clock.image.width,
           height: clock.image.height
         },
@@ -138,8 +138,6 @@ export class ClockSheet extends ActorSheet {
 
   async updateClock(clock) {
     const actor = this.actor;
-	console.log(actor)
-	console.log(this.actor)
 	
 	await clock.themesPromise;
 	await clock.extraThemesPromise;
@@ -164,16 +162,17 @@ export class ClockSheet extends ActorSheet {
 	//console.log(verMajor)
     for (const t of tokens) {
 		//version check for compatability
-		if (verMajor == "0.7"){
-			await t.update({
-				name: actor.name,
-				img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
-				actorLink: true
-			});
-		} else {
+		if (verMajor == "0.8" || verMajor.startsWith("9")) {
 			await t.document.update({
 				name: actor.name,
-				img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
+				img: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
+				actorLink: true
+			});
+		//minor backwards compatability, will be removed sometime after the Lancer system fully updates to Foundry 0.8.x
+		} else if (verMajor == "0.7"){
+			await t.update({
+				name: actor.name,
+				img: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
 				actorLink: true
 			});
 		};
@@ -182,9 +181,9 @@ export class ClockSheet extends ActorSheet {
     // update the Actor
     const persistObj = await this.system.persistClockToActor({ actor, clock });
     const visualObj = {
-      img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
+      img: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
       token: {
-        img: `/${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
+        img: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
         ...DEFAULT_TOKEN
       }
     };

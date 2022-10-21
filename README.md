@@ -6,7 +6,7 @@ While it was initially designed to be used for the Lancer system specifically (h
 
 # Foundry VTT: Clocks
 
-Create [Blades in the Dark](https://bladesinthedark.com/)-esque [progress clocks](https://bladesinthedark.com/progress-clocks) within [Foundry VTT](https://foundryvtt.com/). Supports ~~both ad hoc Tile Clocks for use in a single scene and~~ long-lasting Actor Clocks.
+Create [Blades in the Dark](https://bladesinthedark.com/)-esque [progress clocks](https://bladesinthedark.com/progress-clocks) within [Foundry VTT](https://foundryvtt.com/). Supports long-lasting Actor Clocks.
 
 ## Installation
 

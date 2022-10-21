@@ -33,13 +33,24 @@ export const getSystemMapping = (id) => {
   };
 
   if (!SUPPORTED_SYSTEMS[id]) {
-    return {
-      id,
-      ...defaultSystemConfig,
-      registerSheetOptions: {
-        types: game.data.system.template.Actor.types
-      }
-    };
+	let fullVer = game.version ?? game.data.version
+	if (fullVer.startsWith("10.")) {
+		return {
+			id,
+			...defaultSystemConfig,
+			registerSheetOptions: {
+			types: game.data.template.Actor.types
+		  }
+		};
+	} else {
+		return {
+		  id,
+		  ...defaultSystemConfig,
+		  registerSheetOptions: {
+			types: game.data.system.template.Actor.types
+		  }
+		};
+	}
   }
 
   return {

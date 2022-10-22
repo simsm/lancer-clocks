@@ -22,7 +22,7 @@ It is also now available in the official Foundry add-on repository.
 1) Create a new NPC Actor.
 2) Open the Actor's sheet.
 3) Click the button labelled "Sheet" with a cog next to it.
-4) Change the NPC Sheet Type to <system type>.ClockSheet.
+4) Change the NPC Sheet Type to \<system type\>.ClockSheet.
 
 ## Adding More Themes
 

@@ -22,7 +22,7 @@ export class ClockSheet extends ActorSheet {
       super.defaultOptions,
       {
         classes: ["lancer-clocks", "sheet", `lancer-clocks-system-${game.data.system.id}`, "actor", "npc"],
-        template: "/modules/lancer-clocks/templates/sheet.html",
+        template: "modules/lancer-clocks/templates/sheet.html",
         width: 375,
         height: 600,
         ...supportedSystem.sheetDefaultOptions
@@ -111,15 +111,6 @@ export class ClockSheet extends ActorSheet {
       }));
     });
 	
-	/* html.find("select[name=theme]").click(async (ev) => {
-		ev.preventDefault();
-		let str = "";
-		for(let theme of await clock._themes) {
-		str += `<option value="${theme}">${theme}</option>`
-		}
-		ev.target.innerHTML = str;
-		console.log("Theme Clicked!");
-	}); */
   }
 
   async _updateObject(_event, form) {
@@ -154,28 +145,13 @@ export class ClockSheet extends ActorSheet {
 	compiledThemes.forEach((themeItem) =>{
 		themeDict[themeItem] = compiledThemePaths[compiledThemes.indexOf(themeItem)]
 	});
-	//console.log(game.version ?? game.data.version);
-	let fullVer = game.version ?? game.data.version
-    // update associated tokens
     const tokens = actor.getActiveTokens();
-	let verMajor = fullVer.slice(0,3)
-	//console.log(verMajor)
     for (const t of tokens) {
-		//version check for compatability
-		if (verMajor == "0.8" || verMajor.startsWith("9")) {
-			await t.document.update({
-				name: actor.name,
-				img: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
-				actorLink: true
-			});
-		//minor backwards compatability, will be removed sometime after the Lancer system fully updates to Foundry 0.8.x
-		} else if (verMajor == "0.7"){
-			await t.update({
-				name: actor.name,
-				img: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
-				actorLink: true
-			});
-		};
+		await t.document.update({
+			name: actor.name,
+			img: `${themeDict[clock.theme]}/${clock.size}clock_${clock.progress}.png`,
+			actorLink: true
+		});
     }
 
     // update the Actor

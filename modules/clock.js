@@ -1,3 +1,5 @@
+import { error } from "./util.js";
+
 const nextIndexInArray = (arr, el) => {
   const idx = arr.indexOf(el);
   return (idx < 0 || idx >= arr.length) ? 0 : idx + 1;
@@ -28,15 +30,15 @@ export class Clock {
 			}
 		  });
 		  if (!(baseDirCheck)) {
-			  console.error("Failed.")
-			//throw "Lancer Clock Direrctory Error: No valid directories for base themes."; //Enabling this Breaks Things.
+			  error("Base directory check failed.")
+			//throw "Lancer Clock Direrctory Error: No valid directories for base themes."; //Enabling this Breaks Things. Only enable when debugging or developing this area.
 		  };
 		  
 		this._themes = newDirs;
 		this._themePaths = tempDirs;
 		
 		}).catch(err => {
-			console.error(err)
+			error(err)
 		});
 		let extraPath = game.settings.get("lancer-clocks","extraPaths")
 		if (!(extraPath.endsWith("/"))) {
@@ -44,6 +46,7 @@ export class Clock {
 		}
 		//console.log(extraPath)
 		this.extraThemesPromise = FilePicker.browse("data",extraPath).then(data => {
+			//console.log(data)
 			let tempExtraDirs = data.dirs;
 			let newExtraDirs = [];
 			let newExtraPaths = [];
@@ -58,13 +61,13 @@ export class Clock {
 			})
 			//console.log(tempDirs);
 			if (!(extraDirCheck)) {
-				//console.error("Extra Failed.");
-				//throw "Lancer Clock Directory Error: No valid directories for extra themes."; //Enabling this Breaks Things.
+				//error("Extra directory check failed."); //Will need to figure out a better way of handling a broken directory or a non-existent directory. Right now it'll throw an error if the directory exists but is empty.
+				//throw "Lancer Clock Directory Error: No valid directories for extra themes."; //Enabling this Breaks Things. Only enable when debugging or developing this area.
 			};
 			this._extraThemePaths = newExtraPaths;
 			this._extraThemes = newExtraDirs;
 		}).catch(err => {
-			console.error(err)
+			error(err)
 		});
     const isSupportedSize = size && Clock.sizes.indexOf(parseInt(size)) >= 0;
     this._size = isSupportedSize ? parseInt(size) : Clock.sizes[0];
@@ -91,7 +94,6 @@ export class Clock {
 
   get image () {
     return { 
-      //img: `/modules/lancer-clocks/themes/${this.theme}/${this.size}clock_${this.progress}.png`,
       width: 350,
       height: 350
     };
@@ -114,31 +116,6 @@ export class Clock {
       progress: this.progress
     });
   }
-
-  /* async cycleTheme () {
-	  let cycleClockThemeClock = new Clock();
-	  await cycleClockThemeClock.themesPromise;
-	  await cycleClockThemeClock.extraThemesPromise;
-	  
-		let cycleClockThemeCompiledThemes = [];
-		cycleClockThemeCompiledThemes.push(...cycleClockThemeClock._themes,...(cycleClockThemeClock._extraThemes ?? []));
-		//console.log(cycleClockThemeCompiledThemes);
-	
-		let cycleClockThemeCompiledThemePaths = [];
-		cycleClockThemeCompiledThemePaths.push(...cycleClockThemeClock._themePaths,...(cycleClockThemeClock._extraThemePaths ?? []))
-		//console.log(cycleClockThemeCompiledThemePaths)
-	
-		let cycleClockThemeThemeDict = {};
-		cycleClockThemeCompiledThemes.forEach((themeItem) =>{
-			cycleClockThemeThemeDict[themeItem] = cycleClockThemeCompiledThemePaths[cycleClockThemeCompiledThemes.indexOf(themeItem)]
-		});
-		//console.log(cycleClockThemeCompiledThemes[nextIndexInArray(cycleClockThemeCompiledThemes, this.theme)])
-    return {
-      theme: cycleClockThemeCompiledThemes[nextIndexInArray(cycleClockThemeCompiledThemes, this.theme)],
-      size: this.size,
-      progress: this.progress
-    };
-  } */
 
   increment () {
     const old = this;

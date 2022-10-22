@@ -7,7 +7,7 @@ Hooks.once("init", () => {
   ClockSheet.register();
   game.settings.register("lancer-clocks","extraPaths",{
 		name: 'Extra Lancer Clocks Path',
-		hint: 'This is the directory within the data path for custom clocks. This does not get created automatically and should be a folder that currently exists in the system.',
+		hint: 'This is the directory within the data path for custom clocks. This gets created automatically should it not already exist.',
 		scope: 'client',
 		config: true,
 		type: String,
@@ -24,11 +24,3 @@ Hooks.once("init", () => {
 		console.log("Foundry VTT | Lancer Clocks | Created custom user directory.")})
 
 });
-
-/* Hooks.on("getSceneControlButtons", (controls) => {
-  Tiles.getSceneControlButtons(controls);
-});
-
-Hooks.on("renderTileHUD", async (hud, html, tile) => {
-  await Tiles.renderTileHUD(hud, html, tile);
-}); */
